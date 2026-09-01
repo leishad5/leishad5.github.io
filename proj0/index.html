@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project 0 · LEISHA DEVISETTI · CS180</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F6F3;
+  --ink:#22221F;
+  --dim:#7E7B74;
+  --rule:#DFDCD5;
+  --tint:#EDEBE4;
+  --measure:62ch;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Instrument Sans",system-ui,sans-serif;
+  font-size:17px;
+  line-height:1.7;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1000px;margin:0 auto;padding:0 32px 120px}
+
+/* ---------- header ---------- */
+header{padding:104px 0 0}
+.course{
+  font-size:14px;
+  color:var(--dim);
+  margin:0 0 44px;
+}
+.course a{color:inherit}
+h1{
+  font-weight:500;
+  font-size:clamp(34px,5.6vw,54px);
+  line-height:1.05;
+  letter-spacing:-.035em;
+  margin:0;
+  max-width:15ch;
+}
+.byline{
+  font-size:14px;
+  color:var(--dim);
+  margin:56px 0 0;
+  padding-top:16px;
+  border-top:1px solid var(--rule);
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px 40px;
+}
+.lede{max-width:var(--measure);margin:40px 0 0;font-size:19px;line-height:1.66}
+
+/* ---------- sections ---------- */
+section{padding-top:112px}
+.head{
+  display:grid;
+  grid-template-columns:64px 1fr;
+  gap:0 24px;
+  align-items:baseline;
+  padding-bottom:20px;
+  border-bottom:1px solid var(--rule);
+  margin-bottom:40px;
+}
+.ord{
+  font-family:"Spectral",Georgia,serif;
+  font-weight:300;
+  font-size:34px;
+  color:var(--dim);
+  line-height:1;
+}
+h2{
+  font-weight:500;
+  font-size:24px;
+  letter-spacing:-.02em;
+  margin:0 0 8px;
+}
+.brief{font-size:15px;color:var(--dim);max-width:var(--measure);margin:0}
+p{max-width:var(--measure)}
+.prose{margin:40px 0 0;padding-left:88px}
+.prose p + p{margin-top:20px}
+
+/* ---------- figures ---------- */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+figure{margin:0}
+figure img{
+  display:block;
+  width:100%;
+  height:auto;
+  background:var(--tint);
+  min-height:240px;
+}
+figcaption{
+  font-family:"Spectral",Georgia,serif;
+  font-style:italic;
+  font-weight:300;
+  font-size:18px;
+  margin-top:14px;
+}
+.solo{max-width:720px}
+
+.specs{margin-top:10px;font-size:14px}
+.specs div{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  padding:7px 0;
+  border-top:1px solid var(--rule);
+  color:var(--dim);
+}
+.specs b{font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums}
+
+.num{
+  font-weight:500;
+  font-variant-numeric:tabular-nums;
+  border-bottom:1px solid var(--ink);
+  padding:0 3px;
+}
+
+/* placeholder text */
+.fill{
+  display:block;
+  padding:14px 16px;
+  background:var(--tint);
+  color:#6F6C65;
+  font-family:"Spectral",Georgia,serif;
+  font-style:italic;
+  font-size:16px;
+  line-height:1.6;
+}
+
+/* frame strip for the dolly zoom stills */
+.strip{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:10px;
+  margin-top:32px;
+}
+.strip img{width:100%;height:auto;display:block;background:var(--tint);min-height:100px}
+
+footer{
+  margin-top:120px;
+  padding-top:18px;
+  border-top:1px solid var(--rule);
+  font-size:14px;
+  color:var(--dim);
+}
+a{color:inherit;text-decoration:none;border-bottom:1px solid var(--rule)}
+a:hover{border-bottom-color:var(--ink)}
+a:focus-visible{outline:1.5px solid var(--ink);outline-offset:3px}
+
+@media (max-width:760px){
+  .wrap{padding:0 22px 88px}
+  header{padding-top:64px}
+  section{padding-top:80px}
+  .head{grid-template-columns:1fr;gap:10px}
+  .ord{font-size:26px}
+  .prose{padding-left:0}
+  .pair{grid-template-columns:1fr;gap:40px}
+}
+
+/* @media print{
+  :root{--paper:#fff;--ink:#000;--dim:#555;--rule:#ccc;--tint:#f0f0f0}
+  body{font-size:11.5pt}
+  .wrap{max-width:none;padding:0}
+  section{page-break-inside:avoid;padding-top:40px}
+  header{padding-top:0}
+} */
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="course"><a href="https://cal-cs180.github.io/fa26/">CS180: Intro to Computer Vision and Computational Photography</a> · Project 0</p>
+  <h1>Becoming Friends with Your Camera</h1>
+  <div class="byline">
+    <span>Leisha Devisetti</span>
+    <span>Fall 2026</span>
+    <span>Camera: <span class="fill" style="display:inline;padding:2px 6px">iPhone 14 Pro Max</span>
+  </div>
+</header>
+
+<section id="part1">
+  <div class="head">
+    <div class="ord">01</div>
+    <div>
+      <h2>Selfie, the wrong way and the right way</h2>
+    </div>
+  </div>
+
+  <div class="pair">
+    <figure>
+      <img src="./media/selfie_close.jpg" alt="Portrait taken from close range">
+      <figcaption>Close up</figcaption>
+      <div class="specs">
+        <div><span>focal length</span><b><span class="num">24</span> mm</b></div>
+      </div>
+    </figure>
+
+    <figure>
+      <img src="./media/selfie_middle.jpg" alt="Portrait taken from further away with the lens zoomed in">
+      <figcaption>Middle distance</figcaption>
+      <div class="specs">
+        <div><span>focal length</span><b><span class="num">48</span> mm</b></div>
+      </div>
+    </figure>
+
+    <figure>
+      <img src="./media/selfie_far.jpg" alt="Portrait taken from furthest away with the lens zoomed in">
+      <figcaption>Far and zoomed</figcaption>
+      <div class="specs">
+        <div><span>focal length</span><b><span class="num">77</span> mm</b></div>
+      </div>
+    </figure>
+  </div>
+
+  <div class="prose">
+    <p><span class="fill">(fill)</span></p>
+    <p><span class="fill">(fill)</span></p>
+  </div>
+</section>
+
+<section id="part2">
+  <div class="head">
+    <div class="ord">02</div>
+    <div>
+      <h2>Architectural perspective compression: Panda Express</h2>
+    </div>
+  </div>
+
+  <div class="pair">
+    <figure>
+      <img src="./media/building_far.jpg" alt="Panda Express photographed from far away with the lens zoomed in">
+      <figcaption>Far and zoomed</figcaption>
+      <div class="specs">
+        <div><span>focal length</span><b><span class="num">24</span> mm</b></div>
+        <div><span>distance to facade</span><b><span class="num">__</span> ft</b></div>
+      </div>
+    </figure>
+
+    <figure>
+      <img src="./media/building_close.jpg" alt="Building photographed from close up with no zoom">
+      <figcaption>Close up</figcaption>
+      <div class="specs">
+        <div><span>focal length</span><b><span class="num">12</span> mm</b></div>
+      </div>
+    </figure>
+  </div>
+
+  <div class="prose">
+    <p><span class="fill">xxxxx</span></p>
+    <p><span class="fill">xxxxx</span></p>
+  </div>
+</section>
+
+
+
+<footer>
+  <p>CS180, Fall 2026 · <a href="../index.html">Back to portfolio</a></p>
+</footer>
+
+</div>
+</body>
+</html>
