@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colorizing the Prokudin-Gorskii Plates — CS180 Project 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #12181c;
+    --bg-alt: #1b2329;
+    --paper: #f1e8d6;
+    --ink: #1e211c;
+    --ink-soft: #59594c;
+    --blue: #3d7194;
+    --green: #62804f;
+    --red: #b04f32;
+    --rule: rgba(30,33,28,0.14);
+    --rule-dark: rgba(241,232,214,0.14);
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+  }
+  h1,h2,h3{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    line-height: 1.15;
+    margin: 0 0 0.4em 0;
+  }
+  .mono{ font-family: 'IBM Plex Mono', monospace; }
+  a{ color: var(--blue); }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background: var(--bg);
+    color: var(--paper);
+    padding: 5.5rem 1.5rem 4rem;
+    text-align: left;
+  }
+  .hero-inner{ max-width: 760px; margin: 0 auto; }
+  .hero .kicker{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+    color: #9fb3bd;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1{
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    max-width: 12ch;
+  }
+  .hero p.sub{
+    max-width: 52ch;
+    color: #cfd6d3;
+    font-size: 1.1rem;
+    margin-top: 1rem;
+  }
+  .plate-strip{
+    display:flex;
+    margin-top: 3rem;
+    border: 1px solid rgba(241,232,214,0.25);
+  }
+  .plate-strip div{
+    flex:1;
+    height: 90px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.75rem;
+    color: rgba(241,232,214,0.55);
+  }
+  .plate-b{ background: linear-gradient(180deg, #24404f, #1b3441); border-right:1px solid rgba(241,232,214,0.15);}
+  .plate-g{ background: linear-gradient(180deg, #33452c, #283a22); border-right:1px solid rgba(241,232,214,0.15);}
+  .plate-r{ background: linear-gradient(180deg, #4a2c22, #3a2119);}
+  .plate-strip .arrow{
+    flex: 0 0 60px;
+    color: rgba(241,232,214,0.4);
+    font-size: 1.2rem;
+  }
+
+  /* ---------- Nav ---------- */
+  nav{
+    position: sticky; top:0; z-index: 10;
+    background: rgba(241,232,214,0.94);
+    backdrop-filter: blur(4px);
+    border-bottom: 1px solid var(--rule);
+  }
+  nav .nav-inner{
+    max-width: 760px; margin:0 auto;
+    display:flex; gap: 1.4rem; flex-wrap: wrap;
+    padding: 0.85rem 1.5rem;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+  }
+  nav a{ color: var(--ink-soft); text-decoration:none; }
+  nav a:hover{ color: var(--ink); }
+
+  /* ---------- Layout ---------- */
+  main{ max-width: 760px; margin: 0 auto; padding: 0 1.5rem; }
+  section{ padding: 3.4rem 0; border-bottom: 1px solid var(--rule); }
+  section:last-of-type{ border-bottom:none; }
+  section h2{ font-size: 1.7rem; }
+  .section-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    margin-bottom: 0.6rem;
+    display:block;
+  }
+  .fill{
+    background: rgba(59,89,74,0.06);
+    border: 1px dashed rgba(30,33,28,0.35);
+    border-radius: 3px;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    margin: 0.8rem 0 1.4rem;
+  }
+  .fill strong{ color: var(--ink); }
+
+  /* ---------- Channel legend ---------- */
+  .channels{ display:flex; gap:1.4rem; margin: 0.6rem 0 1.6rem; flex-wrap:wrap; }
+  .channels span{
+    display:flex; align-items:center; gap:0.45rem;
+    font-family:'IBM Plex Mono', monospace; font-size:0.8rem; color: var(--ink-soft);
+  }
+  .swatch{ width:10px; height:10px; border-radius:2px; display:inline-block; }
+  .sw-b{ background: var(--blue); } .sw-g{ background: var(--green); } .sw-r{ background: var(--red); }
+
+  /* ---------- Image slots ---------- */
+  .plate-slot{
+    background: var(--bg-alt);
+    border: 1px solid var(--rule);
+    aspect-ratio: 4/3;
+    display:flex; align-items:center; justify-content:center;
+    color: rgba(241,232,214,0.4);
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    text-align:center;
+    padding: 0.8rem;
+    overflow:hidden;
+  }
+  .plate-slot img{ width:100%; height:100%; object-fit:contain; display:block; }
+  figure{ margin:0; }
+  figcaption{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-top: 0.5rem;
+    display:flex; justify-content:space-between; gap: 0.5rem;
+  }
+  .grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem; /* match whatever gap .grid-3 uses */
+}
+  .grid-3{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; margin-top: 1.4rem;}
+  .grid-4{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; margin-top: 1.4rem;}
+  @media (max-width: 640px){
+    .grid-3{ grid-template-columns: 1fr 1fr; }
+    .grid-4{ grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ---------- Offsets table ---------- */
+  table{ width:100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.92rem; }
+  th, td{ text-align:left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--rule); }
+  th{ font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:0.78rem; color: var(--ink-soft); }
+  td.mono{ color: var(--ink-soft); }
+
+  /* ---------- Misc ---------- */
+  .note{ font-size: 0.9rem; color: var(--ink-soft); }
+  footer{
+    padding: 2.5rem 1.5rem 3.5rem;
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="kicker">CS180 — Project 1</span>
+    <h1>Colorizing the Prokudin-Gorskii plates</h1>
+    <p class="sub">Reconstructing color photographs of the Russian Empire from digitized glass plate negatives, by aligning their blue, green, and red exposures.</p>
+    <div class="plate-strip">
+      <div class="plate-b">B — unaligned</div>
+      <div class="plate-g">G — unaligned</div>
+      <div class="plate-r">R — unaligned</div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#overview">Overview</a>
+    <a href="#approach">Approach</a>
+    <a href="#single-scale">Single-scale</a>
+    <a href="#pyramid">Pyramid</a>
+    <a href="#own-examples">My examples</a>
+    <a href="#failures">Failure cases</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ================= OVERVIEW ================= -->
+  <section id="overview">
+    <span class="section-num">00</span>
+    <h2>Overview</h2>
+    <p>The goal of my work in this project was to take the separated color channels provided in the images, overlay them, then align them to reconstruct the original color image.
+      Since real world colors are usually made up of a combination of the color channels (R, G, B), aligning the images by measuring overall brightness at each pixel and using similarity metrics 
+      would allow for a clean alignment. This technique leverages the natural shadows and bright points of an image to get an aesthetic color image reconstruction. 
+    </p>
+  </section>
+
+  <!-- ================= APPROACH ================= -->
+  <section id="approach">
+    <span class="section-num">01</span>
+    <h2>Approach</h2>
+    <p>The user has to input several parameters, such as the filename, the metric of choice to determine optimal alignment, the crop proportion, and the search window size (delta). 
+      With this information, the image pyramid alignment algorithm will run. The current approach to the algorithm is to use single scale alignment (ignore the image pyramids) if the image has few enough pixels corresponding to a JPEG. 
+      Larger files (such as TIFFs) will need to be aligned using the optimized image pyramid alignment. 
+    </p>
+    <div class="channels">
+      <span><span class="swatch sw-b"></span>Blue — reference channel</span>
+      <span><span class="swatch sw-g"></span>Green — aligned to B</span>
+      <span><span class="swatch sw-r"></span>Red — aligned to B</span>
+    </div>
+    <div class="fill"><strong>For all images output below:</strong>
+      <ul>
+        <li>Metric used: Mostly L2; After testing both L2 and NCC on the JPEG images, I decided to use L2 for all remaining images because it ran faster with similar results.</li>
+        <li>Search window size for single-scale:[-15, 15]</li>
+        <li>Crop proportion: 0.1 (i.e. 10% off each border)</li>
+      </ul>
+    </div>
+  </section>
+
+    <!-- ================= SINGLE SCALE ================= -->
+  <section id="single-scale">
+    <span class="section-num">02</span>
+    <h2>Single-scale alignment</h2>
+    <p>Results on the low-resolution JPEGs — <strong>cathedral</strong>, <strong>monastery</strong>, and <strong>tobolsk</strong> — using exhaustive search over a small window.</p>
+    <small>Upon inspection of the JPEGs, each color channel image was about 390 pixels wide and about 340 pixels high, so this informed the base case minimum size that would allow an image to bypass the image pyramids.</small>
+
+    <table>
+      <thead><tr><th>Image</th><th>L2</th><th>NCC</th></tr></thead>
+      <tbody>
+        <tr>
+          <th scope="row">cathedral</th>
+          <td><figure><div class="plate-slot"><img src="media/out/out_cathedral_L2.jpg" alt="cathedral L2 composite"></div><figcaption><span 
+            class="mono">G: (2, 5)</span><span class="mono">R: (3, 12)</span><span class="mono">runtime: 0.11 s</span></figcaption></figure></td>
+          <td><figure><div class="plate-slot"><img src="media/out/out_cathedral_NCC.jpg" alt="cathedral NCC composite"></div><figcaption><span 
+            class="mono">G: (2, 5)</span><span class="mono">R: (3, 12)</span><span class="mono">runtime: 0.42 s</span></figcaption></figure></td>
+        </tr>
+        <tr>
+          <th scope="row">monastery</th>
+          <td><figure><div class="plate-slot"><img src="media/out/out_monastery_L2.jpg" alt="monastery L2 composite">
+          </div><figcaption><span class="mono">G: (2, -3)</span><span class="mono">R: (2, 3)</span><span class="mono">runtime: 0.11 s</span></figcaption></figure></td>
+          <td><figure><div class="plate-slot"><img src="media/out/out_monastery_NCC.jpg" alt="monastery NCC composite">
+          </div><figcaption><span class="mono">G: (2, -3)</span><span class="mono">R: (2, 3)</span><span class="mono">runtime: 0.42 s</span></figcaption></figure></td>
+        </tr>
+        <tr>
+          <th scope="row">tobolsk</th>
+          <td><figure><div class="plate-slot"><img src="media/out/out_tobolsk_L2.jpg" alt="tobolsk L2 composite">
+          </div><figcaption><span class="mono">G: (3, 3)</span><span class="mono">R: (3, 6)</span><span class="mono">runtime: 0.11 s</span></figcaption></figure></td>
+          <td><figure><div class="plate-slot"><img src="media/out/out_tobolsk_NCC.jpg" alt="tobolsk NCC composite">
+          </div><figcaption><span class="mono">G: (3, 3)</span><span class="mono">R: (3, 6)</span><span class="mono">runtime: 0.44 s</span></figcaption></figure></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ================= PYRAMID ================= -->
+  <section id="pyramid">
+    <span class="section-num">03</span>
+    <h2>Multi-scale pyramid alignment</h2>
+    <p>Results on all 14 provided full-resolution images, using the coarse-to-fine pyramid so alignment stays fast even on the large <span class="mono">.tif</span> scans.</p>
+
+    <table>
+      <thead><tr><th>Image</th><th>L2 output and alignment details</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">ilemselga</th><td><figure><div class="plate-slot"><img src="media/out/out_ilemselga_L2.jpg" alt="ilemselga L2 composite" onerror="this.parentElement.textContent='media/out/out_ilemselga_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (7, 40)</span><span class="mono" style="display:block">R offset: (11, 130)</span><span class="mono" style="display:block">runtime: 10.51 s</span></figcaption></figure></td></tr>
+        <tr><th scope="row">harvesters</th><td><figure><div class="plate-slot"><img src="media/out/out_harvesters_L2.jpg" alt="harvesters L2 composite" onerror="this.parentElement.textContent='media/out/out_harvesters_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (16, 59)</span><span class="mono" style="display:block">R offset: (13, 123)</span><span class="mono" style="display:block">runtime: 10.52 s</span></figcaption></figure></td></tr>
+        <tr><th scope="row">self_portrait</th><td><figure><div class="plate-slot"><img src="media/out/out_self_portrait_L2.jpg" alt="self portrait L2 composite" onerror="this.parentElement.textContent='media/out/out_self_portrait_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (29, 78)</span><span class="mono" style="display:block">R offset: (37, 176)</span><span class="mono" style="display:block">runtime: 10.54 s</span></figcaption></figure></td></tr>
+        <tr><th scope="row">emir</th><td><figure><div class="plate-slot"><img src="media/out/out_emir_L2.jpg" alt="emir L2 composite" onerror="this.parentElement.textContent='media/out/out_emir_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (24, 49)</span><span class="mono" style="display:block">R offset: (55, 103)</span><span class="mono" style="display:block">runtime: 10.44 s</span></figcaption></figure></td></tr>
+        <tr><th scope="row">siren</th><td><figure><div class="plate-slot"><img src="media/out/out_siren_L2.jpg" alt="siren L2 composite" onerror="this.parentElement.textContent='media/out/out_siren_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (-6, 49)</span><span class="mono" style="display:block">R offset: (-25, 95)</span><span class="mono" style="display:block">runtime: 10.71 s</span></figcaption></figure></td></tr>
+        <tr><th scope="row">cathedral</th><td><figure><div class="plate-slot"><img src="media/out/out_cathedral_L2.jpg" alt="brick L2 composite" onerror="this.parentElement.textContent='media/out/out_cathedral_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (2, 5)</span><span class="mono" style="display:block">R offset: (3, 12)</span><span class="mono" style="display:block">runtime: 0.11 s</span></figcaption></figure></td></tr>
+        <tr><th scope="row">monastery</th><td><figure><div class="plate-slot"><img src="media/out/out_monastery_L2.jpg" alt="handcar L2 composite" onerror="this.parentElement.textContent='media/out/out_monastery_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (2, -3)</span><span class="mono" style="display:block">R offset: (2, 3)</span><span class="mono" style="display:block">runtime: 0.11 s</span></figcaption></figure></td></tr>
+        <tr><th scope="row">icon</th><td><figure><div class="plate-slot"><img src="media/out/out_icon_L2.jpg" alt="icon L2 composite" onerror="this.parentElement.textContent='media/out/out_icon_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (?, ?)</span><span class="mono" style="display:block">R offset: (?, ?)</span><span class="mono" style="display:block">runtime: ? s</span></figcaption></figure></td></tr>
+        <tr><th scope="row">tobolsk</th><td><figure><div class="plate-slot"><img src="media/out/out_tobolsk_L2.jpg" alt="desert L2 composite" onerror="this.parentElement.textContent='media/out/out_tobolsk_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (17, 41)</span><span class="mono" style="display:block">R offset: (23, 89)</span><span class="mono" style="display:block">runtime: 10.50 s</span></figcaption></figure></td></tr>
+        <tr><th scope="row">melons</th><td><figure><div class="plate-slot"><img src="media/out/out_melons_L2.jpg" alt="melons L2 composite" onerror="this.parentElement.textContent='media/out/out_melons_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (10, 81)</span><span class="mono" style="display:block">R offset: (13, 178)</span><span class="mono" style="display:block">runtime: 10.84 s</span></figcaption></figure></td></tr>
+        <tr><th scope="row">three_generations</th><td><figure><div class="plate-slot"><img src="media/out/out_three_generations_L2.jpg" alt="three generations L2 composite" onerror="this.parentElement.textContent='media/out/out_three_generations_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (14, 53)</span><span class="mono" style="display:block">R offset: (11, 112)</span><span class="mono" style="display:block">runtime: 10.43 s</span></figcaption></figure></td></tr>
+        <tr><th scope="row">church</th><td><figure><div class="plate-slot"><img src="media/out/out_church_L2.jpg" alt="church L2 composite" onerror="this.parentElement.textContent='media/out/out_church_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (4, 25)</span><span class="mono" style="display:block">R offset: (-4, 58)</span><span class="mono" style="display:block">runtime: 10.2 s</span></figcaption></figure></td></tr>
+        <tr><th scope="row">religous_painting</th><td><figure><div class="plate-slot"><img src="media/out/out_religous_painting_L2.jpg" alt="religous painting L2 composite" onerror="this.parentElement.textContent='media/out/out_religous_painting_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (3, 27)</span><span class="mono" style="display:block">R offset: (7, 68)</span><span class="mono" style="display:block">runtime: 10.22 s</span></figcaption></figure></td></tr>
+        <tr><th scope="row">wharf</th><td><figure><div class="plate-slot"><img src="media/out/out_wharf_L2.jpg" alt="wharf L2 composite" onerror="this.parentElement.textContent='media/out/out_wharf_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (-7, 15)</span><span class="mono" style="display:block">R offset: (-16, 82)</span><span class="mono" style="display:block">runtime: 10.57 s</span></figcaption></figure></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ================= OWN EXAMPLES ================= -->
+  <section id="own-examples">
+    <span class="section-num">04</span>
+    <h2>My own examples</h2>
+    <p>Three additional images downloaded from the <a href="https://www.loc.gov/collections/prokudin-gorskii/?st=grid" target="_blank" rel="noopener">Library of Congress Prokudin-Gorskii collection</a>, run through the same pipeline.</p>
+    <table>
+      <thead><tr><th>Image</th><th>L2 output and alignment details</th></tr></thead>
+      <tbody>
+        <tr>
+          <th scope="row">brick</th>
+          <td><figure><div class="plate-slot"><img src="media/out/out_brick_L2.jpg" alt="brick L2 composite" onerror="this.parentElement.textContent='media/out/out_brick_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (-12, 45)</span><span class="mono" style="display:block">R offset: (-27, 100)</span><span class="mono" style="display:block">runtime: 10.15 s</span></figcaption></figure></td>
+        </tr>
+        <tr>
+          <th scope="row">desert</th>
+          <td><figure><div class="plate-slot"><img src="media/out/out_desert_L2.jpg" alt="desert L2 composite" onerror="this.parentElement.textContent='media/out/out_desert_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (13, 36)</span><span class="mono" style="display:block">R offset: (21, 93)</span><span class="mono" style="display:block">runtime: 10.70 s</span></figcaption></figure></td>
+        </tr>
+        <tr>
+          <th scope="row">handcar</th>
+          <td><figure><div class="plate-slot"><img src="media/out/out_handcar_L2.jpg" alt="handcar L2 composite" onerror="this.parentElement.textContent='media/out/out_handcar_L2.jpg'"></div><figcaption style="display:block"><span class="mono" style="display:block">G offset: (-7, 28)</span><span class="mono" style="display:block">R offset: (-19, 108)</span><span class="mono" style="display:block">runtime: 10.58 s</span></figcaption></figure></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ================= FAILURES ================= -->
+  <section id="failures">
+    <span class="section-num">05</span>
+    <h2>Failure cases</h2>
+    <div class="grid-3" style="grid-template-columns: 1fr;">
+      <figure>
+        <div class="plate-slot"><img src="media/out/out_emir_L2.jpg" alt="" onerror="this.parentElement.textContent='failed image here'"></div>
+      </figure>
+    </div>
+    <div class="fill"><strong>Why this failed:</strong> The image of the Emir of Bukhara likely failed with my chosen alignment strategy because of the reason listed in the project spec: the images to be matched do not have the same brightness values. 
+      Since the clothes of the Emir cover a large area of the image and are highly saturated within the color channels, overall brightness fails as a proxy for feature overlap because we were relying on vague bright points and shadows before.
+    For instance, the bright blue cloak on the Emir would likely have higher values at those pixel locations in the blue color channel, but low values for the red and green color channels. Thus, when attempting to align the image, similarity between the brightness of these pixels across color channels is low.</div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="mono">Source code: <a href="../../index.html">link to your repo</a></div>
+</footer>
+
+</body>
+</html>
