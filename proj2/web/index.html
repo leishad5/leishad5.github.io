@@ -576,7 +576,7 @@ a:focus-visible{outline:1.5px solid var(--ink);outline-offset:3px}
   <div class="prose">
     <p>A Gaussian blur averages each pixel with its neighbors and keeps slow changes while smoothing out fast changes in pixel intensity. 
       Subtracting the blurred image from the original leaves the high frequencies. An image looks sharper when its high frequencies are stronger 
-      so the unsharp mask adds them back weighted by alpha. /p>
+      so the unsharp mask adds them back weighted by alpha. <p>
   </div>
 
   <h3>Sharpened Milo</h3>
@@ -751,6 +751,8 @@ a:focus-visible{outline:1.5px solid var(--ink);outline-offset:3px}
       <img src="./media/cookie1_hybrid.jpg" alt="Hybrid image">
       <figcaption>Hybrid</figcaption>
     </figure>
+    <p>Note that it looks a little indistinguishable between high frequencies and low frequencies because Cookie has a lot of bright points, so after testing several values, this was a pretty good hybrid image I could get.
+      However, very close and very far distances will separate these versions. The same goes for below. <p>
   </div>
   <div class="specs">
     <div><span>low pass sigma</span><b><span class="num">5</span></b></div>
