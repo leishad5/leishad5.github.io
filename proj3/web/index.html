@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project 3 · CS180</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Spectral:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<script>window.MathJax={tex:{inlineMath:[['$','$']]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+<style>
+:root{--paper:#F7F6F3;--ink:#22221F;--dim:#7E7B74;--rule:#DFDCD5;--tint:#EDEBE6;--measure:62ch}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Instrument Sans",system-ui,sans-serif;
+  font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:960px;margin:0 auto;padding:0 32px 96px}
+
+/* ---------- header ---------- */
+header{padding-top:112px}
+.course{font-size:14px;color:var(--dim);margin:0 0 44px}
+h1{font-weight:500;font-size:clamp(32px,5.4vw,48px);letter-spacing:-.035em;line-height:1.05;margin:0}
+.byline{display:flex;gap:24px;font-size:14px;color:var(--dim);margin-top:20px}
+.toc{list-style:none;padding:0;margin:56px 0 0;max-width:560px}
+.toc li{border-top:1px solid var(--rule)}
+.toc li:last-child{border-bottom:1px solid var(--rule)}
+.toc a{display:flex;gap:24px;padding:10px 0;border:0;font-size:15px}
+.toc a span{width:56px;flex-shrink:0;color:var(--dim);font-variant-numeric:tabular-nums}
+.toc a:hover{color:var(--dim)}
+.toc .group{border-top:0;padding:28px 0 6px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+
+/* ---------- sections ---------- */
+h2.part{
+  font-weight:500;font-size:14px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--dim);margin:120px 0 0;padding-bottom:12px;border-bottom:1px solid var(--rule);
+}
+section{padding-top:96px}
+.head{display:grid;grid-template-columns:104px 1fr;gap:24px;margin-bottom:40px;align-items:baseline}
+.ord{font-family:"Spectral",Georgia,serif;font-style:italic;font-weight:300;font-size:32px;line-height:1;color:var(--dim)}
+.head h2{font-weight:500;font-size:26px;letter-spacing:-.025em;line-height:1.2;margin:0}
+h3{
+  font-weight:500;font-size:15px;letter-spacing:-.005em;
+  margin:64px 0 20px;
+}
+p{max-width:var(--measure)}
+.prose{margin:40px 0 0;padding-left:128px}
+.prose p + p{margin-top:20px}
+
+/* ---------- figures ---------- */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.pair + .pair{margin-top:40px}
+figure{margin:0}
+figure img{display:block;width:100%;height:auto;background:var(--tint);min-height:240px}
+figcaption{font-family:"Spectral",Georgia,serif;font-style:italic;font-weight:300;font-size:18px;margin-top:14px}
+.solo{max-width:720px}
+.panel + .panel{margin-top:40px}
+.panel img{min-height:0}
+
+/* dense grids: samples */
+.tight{gap:12px}
+.tight figure img{min-height:110px}
+.tight figcaption{font-size:15px;margin-top:8px}
+
+/* square frames for 512x512 outputs */
+.crop figure img{aspect-ratio:1 / 1;object-fit:cover;min-height:0}
+
+/* far-away view for hybrids */
+.far{display:flex;align-items:flex-end}
+.far img{width:64px;min-height:0}
+
+/* prompts */
+.prompt{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:13.5px;background:var(--tint);padding:2px 6px}
+
+/* code snippets */
+.code{margin:0 0 28px}
+.code .label{font-size:14px;color:var(--dim);margin:0 0 8px}
+pre{margin:0;padding:18px 20px;background:var(--tint);overflow-x:auto;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:13.5px;line-height:1.6;tab-size:4}
+
+/* results table */
+table{border-collapse:collapse;width:100%;max-width:560px;font-size:15px;margin:0}
+th,td{text-align:left;padding:9px 0;border-top:1px solid var(--rule)}
+tr:last-child td{border-bottom:1px solid var(--rule)}
+th{font-weight:400;color:var(--dim);font-size:14px}
+td:last-child,th:last-child{text-align:right;font-variant-numeric:tabular-nums}
+
+footer{margin-top:120px;padding-top:18px;border-top:1px solid var(--rule);font-size:14px;color:var(--dim)}
+a{color:inherit;text-decoration:none;border-bottom:1px solid var(--rule)}
+a:hover{border-bottom-color:var(--ink)}
+a:focus-visible{outline:1.5px solid var(--ink);outline-offset:3px}
+
+@media (max-width:760px){
+  .wrap{padding:0 22px 88px}
+  header{padding-top:64px}
+  section{padding-top:80px}
+  .head{grid-template-columns:1fr;gap:10px}
+  .ord{font-size:26px}
+  .prose{padding-left:0}
+  .pair{grid-template-columns:1fr !important;gap:40px}
+  .pair.tight{grid-template-columns:1fr 1fr !important;gap:12px}
+}
+
+/* printing to PDF for Gradescope */
+@media print{
+  :root{--paper:#fff;--ink:#000;--dim:#555;--rule:#ccc;--tint:#f0f0f0}
+  body{font-size:11.5pt}
+  .wrap{max-width:none;padding:0}
+  section{page-break-inside:avoid;padding-top:40px}
+  header{padding-top:0}
+  .toc{display:none}
+  pre{white-space:pre-wrap}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="course"><a href="https://cal-cs180.github.io/fa26/hw/proj3-flow/index.html">CS180: Intro to Computer Vision and Computational Photography</a> · Project 3</p>
+  <h1>Exploring the Power of Flow Models</h1>
+  <div class="byline">
+    <span>Leisha Devisetti</span>
+    <span>Fall 2026</span>
+  </div>
+
+  <ul class="toc">
+    <li class="group">Part A</li>
+    <li><a href="#p11"><span>1.1</span>Noisy training inputs</a></li>
+    <li><a href="#p12"><span>1.2</span>Classical denoising</a></li>
+    <li><a href="#p13"><span>1.3</span>One-step denoising</a></li>
+    <li><a href="#p14"><span>1.4</span>Visualizing velocity</a></li>
+    <li><a href="#p15"><span>1.5</span>Euler sampling</a></li>
+    <li><a href="#p16"><span>1.6</span>Generating from noise</a></li>
+    <li><a href="#p21"><span>2.1</span>Classifier-free guidance</a></li>
+    <li><a href="#p31"><span>3.1</span>Image-to-image editing</a></li>
+    <li><a href="#p32"><span>3.2</span>Text-guided editing</a></li>
+    <li><a href="#p33"><span>3.3</span>Visual anagrams</a></li>
+    <li><a href="#p34"><span>3.4</span>Hybrid images</a></li>
+    <li class="group">Part B</li>
+    <li><a href="#b12"><span>1.2</span>Noising process</a></li>
+    <li><a href="#b121"><span>1.2.1</span>Training the denoiser</a></li>
+    <li><a href="#b122"><span>1.2.2</span>Out-of-distribution noise</a></li>
+    <li><a href="#b123"><span>1.2.3</span>Denoising pure noise</a></li>
+    <li><a href="#b22"><span>2.2</span>Training with time</a></li>
+    <li><a href="#b23"><span>2.3</span>Sampling with time</a></li>
+    <li><a href="#b25"><span>2.5</span>Training with class</a></li>
+    <li><a href="#b26"><span>2.6</span>Sampling with class</a></li>
+  </ul>
+</header>
+
+<!-- =================================================================== -->
+<!-- ============================ PART A =============================== -->
+<!-- =================================================================== -->
+
+<h2 class="part">Part A1: Training and sampling</h2>
+
+<!-- ============ A1.1 ============ -->
+<section id="p11">
+  <div class="head">
+    <div class="ord">1.1</div>
+    <h2>Noisy training inputs</h2>
+  </div>
+
+  <figure class="panel"><img src="./media/training_inputs.png" alt="Original image and noisy inputs at t 0.25, 0.50, 0.75"><figcaption>Original, then t = 0.25, 0.50, 0.75</figcaption></figure>
+</section>
+
+<!-- ============ A1.2 ============ -->
+<section id="p12">
+  <div class="head">
+    <div class="ord">1.2</div>
+    <h2>Classical denoising</h2>
+  </div>
+
+  <figure class="panel solo"><img src="./media/blur_0.25.png" alt="Noisy input and Gaussian blur at t 0.25"><figcaption>Noisy and Gaussian blur, t = 0.25</figcaption></figure>
+  <figure class="panel solo"><img src="./media/blur_0.5.png" alt="Noisy input and Gaussian blur at t 0.50"><figcaption>Noisy and Gaussian blur, t = 0.50</figcaption></figure>
+  <figure class="panel solo"><img src="./media/blur_0.75.png" alt="Noisy input and Gaussian blur at t 0.75"><figcaption>Noisy and Gaussian blur, t = 0.75</figcaption></figure>
+</section>
+
+<!-- ============ A1.3 ============ -->
+<section id="p13">
+  <div class="head">
+    <div class="ord">1.3</div>
+    <h2>One-step denoising</h2>
+  </div>
+
+
+  <figure class="panel"><img src="./media/one_step_0.25.png" alt="Original, noisy, one-step at t 0.25"><figcaption>Original, noisy, one-step, t = 0.25</figcaption></figure>
+  <figure class="panel"><img src="./media/one_step_0.5.png" alt="Original, noisy, one-step at t 0.50"><figcaption>Original, noisy, one-step, t = 0.50</figcaption></figure>
+  <figure class="panel"><img src="./media/one_step_0.75.png" alt="Original, noisy, one-step at t 0.75"><figcaption>Original, noisy, one-step, t = 0.75</figcaption></figure>
+</section>
+
+<!-- ============ A1.4 ============ -->
+<section id="p14">
+  <div class="head">
+    <div class="ord">1.4</div>
+    <h2>Visualizing velocity</h2>
+  </div>
+
+  <figure style="max-width:240px">
+    <img src="./media/velocity_original.png" alt="Original image" style="min-height:0">
+    <figcaption>Original</figcaption>
+  </figure>
+
+  <h3>t = 0.25</h3>
+  <figure class="panel"><img src="./media/velocity_0.25.png" alt="Noisy, predicted update, ground truth update, error at t 0.25"><figcaption>Noisy, predicted, ground truth, error</figcaption></figure>
+  <h3>t = 0.50</h3>
+  <figure class="panel"><img src="./media/velocity_0.50.png" alt="Noisy, predicted update, ground truth update, error at t 0.50"><figcaption>Noisy, predicted, ground truth, error</figcaption></figure>
+  <h3>t = 0.75</h3>
+  <figure class="panel"><img src="./media/velocity_0.75.png" alt="Noisy, predicted update, ground truth update, error at t 0.75"><figcaption>Noisy, predicted, ground truth, error</figcaption></figure>
+</section>
+
+<!-- ============ A1.5 ============ -->
+<section id="p15">
+  <div class="head">
+    <div class="ord">1.5</div>
+    <h2>Euler sampling</h2>
+  </div>
+
+  <h3>Trajectory</h3>
+  <figure class="panel"><img src="./media/trajectory.png" alt="Euler trajectory: initial state, every fifth update, and final image"><figcaption>Initial state, every fifth update, and final image, t = 0.50 to 1.00</figcaption></figure>
+
+  <h3>Comparison, same t = 0.50 input</h3>
+  <figure class="panel"><img src="./media/comparison.png" alt="Original, Gaussian blur, one-step, Euler"><figcaption>Original, Gaussian blur, one-step, Euler</figcaption></figure>
+
+  <h3>Reconstruction MSE</h3>
+  <table>
+    <tr><th>Method</th><th>MSE</th></tr>
+    <tr><td>Gaussian blur</td><td>0.0263</td></tr>
+    <tr><td>One-step</td><td>0.0109</td></tr>
+    <tr><td>Euler</td><td>0.0128</td></tr>
+  </table>
+  <div class="prose">
+    <p>My final image with the Euler sampling is the sharpest, best looking image and looks the most like a real photo. Gaussian blur removes the noise, but not that well, and it does not have any fine details. The one step looks very smoothed (airbrushed) but it doesn't make the picture look like the original that well either. The Euler image looks realistic, but its fine details differ from the original. Euler sampling predicts the velocity at multiple time points and moves towards committing to an image over time steps, which means it won't be as blurry because it's not averaging images the way one step is.</p>
+    <p>However, according to MSE, one step scores best (0.0109) while the blurring does the worst (0.0263). This is because a realistic but wrong image will score worse with pixel wise comparisons than an image that uses the expected pixel values. Blur scores worst because it removes noise without recovering any structure.</p>
+  </div>
+</section>
+
+<!-- ============ A1.6 ============ -->
+<section id="p16">
+  <div class="head">
+    <div class="ord">1.6</div>
+    <h2>Generating from noise</h2>
+  </div>
+
+  <div class="pair tight crop" style="grid-template-columns:repeat(5,1fr)">
+    <figure><img src="./media/conditional_0.png" alt="Sample 1"><figcaption>Seed 180</figcaption></figure>
+    <figure><img src="./media/conditional_1.png" alt="Sample 2"><figcaption>Seed 181</figcaption></figure>
+    <figure><img src="./media/conditional_2.png" alt="Sample 3"><figcaption>Seed 182</figcaption></figure>
+    <figure><img src="./media/conditional_3.png" alt="Sample 4"><figcaption>Seed 183</figcaption></figure>
+    <figure><img src="./media/conditional_4.png" alt="Sample 5"><figcaption>Seed 184</figcaption></figure>
+  </div>
+  <div class="prose">
+    <p>The generic prompt sent to the model does seem to favor generating images of people as opposed to quite literally anything else. This might have to do with how the model was trained, and what the model defaults to when given minimal context.</p>
+  </div>
+</section>
+
+<!-- =================================================================== -->
+<h2 class="part">Part A2: Conditional generation</h2>
+
+<!-- ============ A2.1 ============ -->
+<section id="p21">
+  <div class="head">
+    <div class="ord">2.1</div>
+    <h2>Classifier-free guidance</h2>
+  </div>
+
+
+  <div class="pair tight crop" style="grid-template-columns:repeat(5,1fr)">
+    <figure><img src="./media/cfg_0.png" alt="CFG sample 1"><figcaption>Seed 180</figcaption></figure>
+    <figure><img src="./media/cfg_1.png" alt="CFG sample 2"><figcaption>Seed 181</figcaption></figure>
+    <figure><img src="./media/cfg_2.png" alt="CFG sample 3"><figcaption>Seed 182</figcaption></figure>
+    <figure><img src="./media/cfg_3.png" alt="CFG sample 4"><figcaption>Seed 183</figcaption></figure>
+    <figure><img src="./media/cfg_4.png" alt="CFG sample 5"><figcaption>Seed 184</figcaption></figure>
+  </div>
+  <div class="prose">
+    <p>Compared to the unguided samples, the CFG samples are much sharper and more coherent. The images look a lot more high quality. Each of the facial features look like how they're meant to according to our perception of the world, whereas in 1.6, the images were quite random. However, in the CFG images, the subjects all look pretty similar and the color palette used across the images is largely the same. Since CFG tries to stay more true to the prompt, we lose variety.</p>
+  </div>
+</section>
+
+<!-- =================================================================== -->
+<h2 class="part">Part A3: Creative applications</h2>
+
+<!-- ============ A3.1 ============ -->
+<section id="p31">
+  <div class="head">
+    <div class="ord">3.1</div>
+    <h2>Image-to-image editing</h2>
+  </div>
+
+  <h3>Campanile</h3>
+  <figure class="panel"><img src="./media/edit_campanile.png" alt="Campanile edits at seven starting times"><figcaption>Original, then t = 0.02 to 0.50</figcaption></figure>
+  <h3>Puppy</h3>
+  <figure class="panel"><img src="./media/edit_my_image_1.png" alt="Puppy edits at seven starting times"><figcaption>Original, then t = 0.02 to 0.50</figcaption></figure>
+  <h3>Cake</h3>
+  <figure class="panel"><img src="./media/edit_my_image_2.png" alt="Cake edits at seven starting times"><figcaption>Original, then t = 0.02 to 0.50</figcaption></figure>
+
+  <h3>Web image: Picasso painting</h3>
+  <figure class="panel"><img src="./media/edit_web_image.png" alt="Web image edits at seven starting times"><figcaption>Original, then t = 0.02 to 0.50</figcaption></figure>
+  <h3>Hand-drawn image 1</h3>
+  <figure class="panel"><img src="./media/edit_drawing_1.png" alt="Drawing 1 edits at seven starting times"><figcaption>Original, then t = 0.02 to 0.50</figcaption></figure>
+  <h3>Hand-drawn image 2</h3>
+  <figure class="panel"><img src="./media/edit_drawing_2.png" alt="Drawing 2 edits at seven starting times"><figcaption>Original, then t = 0.02 to 0.50</figcaption></figure>
+</section>
+
+<!-- ============ A3.2 ============ -->
+<section id="p32">
+  <div class="head">
+    <div class="ord">3.2</div>
+    <h2>Text-guided editing</h2>
+  </div>
+
+  <h3>Campanile, <span class="prompt">"a photograph of a skyscraper in new york"</span></h3>
+  <figure class="panel"><img src="./media/text_edit_campanile.png" alt="Campanile text-guided edits"><figcaption>Original, then t = 0.02 to 0.50</figcaption></figure>
+  <h3>Puppy, <span class="prompt">"a photograph of an orange kitten with black spots"</span></h3>
+  <figure class="panel"><img src="./media/text_edit_my_image_1.png" alt="Puppy text-guided edits"><figcaption>Original, then t = 0.02 to 0.50</figcaption></figure>
+  <h3>Cake, <span class="prompt">"a photograph of a chocolate strawberry cake"</span></h3>
+  <figure class="panel"><img src="./media/text_edit_my_image_2.png" alt="Cake text-guided edits"><figcaption>Original, then t = 0.02 to 0.50</figcaption></figure>
+</section>
+
+<!-- ============ A3.3 ============ -->
+<section id="p33">
+  <div class="head">
+    <div class="ord">3.3</div>
+    <h2>Visual anagrams</h2>
+  </div>
+
+
+  <div class="pair crop">
+    <figure><img src="./media/anagram_0.png" alt="Anagram 1 upright"><figcaption>Upright, <span class="prompt">"a marble statue of a fat king"</span></figcaption></figure>
+    <figure><img src="./media/anagram_0.png" alt="Anagram 1 rotated" style="transform:rotate(180deg)"><figcaption>Rotated, <span class="prompt">"a statue of an old woman"</span></figcaption></figure>
+  </div>
+  <div class="pair crop">
+    <figure><img src="./media/anagram_1.png" alt="Anagram 2 upright"><figcaption>Upright, <span class="prompt">"a painting of a battle"</span></figcaption></figure>
+    <figure><img src="./media/anagram_1.png" alt="Anagram 2 rotated" style="transform:rotate(180deg)"><figcaption>Rotated, <span class="prompt">"a painting of a volcano"</span></figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ A3.4 ============ -->
+<section id="p34">
+  <div class="head">
+    <div class="ord">3.4</div>
+    <h2>Hybrid images</h2>
+  </div>
+
+
+  <div class="pair crop" style="grid-template-columns:3fr 1fr;align-items:end">
+    <figure><img src="./media/hybrid_0.png" alt="Hybrid 1 near"><figcaption>Near, <span class="prompt">"a photo of a kitten"</span></figcaption></figure>
+    <figure class="far"><div><img src="./media/hybrid_0.png" alt="Hybrid 1 far"><figcaption>Far, <span class="prompt">"a photo of the grand canyon"</span></figcaption></div></figure>
+  </div>
+  <div class="pair crop" style="grid-template-columns:3fr 1fr;align-items:end">
+    <figure><img src="./media/hybrid_1.png" alt="Hybrid 2 near"><figcaption>Near, <span class="prompt">"a lithograph of a houseplants"</span></figcaption></figure>
+    <figure class="far"><div><img src="./media/hybrid_1.png" alt="Hybrid 2 far"><figcaption>Far, <span class="prompt">"a lithograph of a tiger"</span></figcaption></div></figure>
+  </div>
+</section>
+
+<!-- =================================================================== -->
+<!-- ============================ PART B =============================== -->
+<!-- =================================================================== -->
+
+<h2 class="part">Part B1: Single-step denoising UNet</h2>
+
+<!-- ============ B1.2 ============ -->
+<section id="b12">
+  <div class="head">
+    <div class="ord">1.2</div>
+    <h2>Noising process</h2>
+  </div>
+
+  <figure class="panel"><img src="./media/partb/noise_levels.png" alt="One digit noised at sigma 0 through 1"><figcaption>$\sigma$ = 0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0</figcaption></figure>
+</section>
+
+<!-- ============ B1.2.1 ============ -->
+<section id="b121">
+  <div class="head">
+    <div class="ord">1.2.1</div>
+    <h2>Training the single-step denoiser</h2>
+  </div>
+
+  <h3>Training loss</h3>
+  <figure class="panel"><img src="./media/partb/denoise_sigma0.5_loss.png" alt="Training loss for the sigma 0.5 denoiser"><figcaption>MSE per optimizer step</figcaption></figure>
+
+  <h3>Test set results</h3>
+  <div class="pair">
+    <figure><img src="./media/partb/test_0.5_noise_epoch1.png" alt="Clean, noisy, denoised after epoch 1" style="min-height:0"><figcaption>Epoch 1: clean, noisy, denoised</figcaption></figure>
+    <figure><img src="./media/partb/test_0.5_noise_epoch5.png" alt="Clean, noisy, denoised after epoch 5" style="min-height:0"><figcaption>Epoch 5: clean, noisy, denoised</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ B1.2.2 ============ -->
+<section id="b122">
+  <div class="head">
+    <div class="ord">1.2.2</div>
+    <h2>Out-of-distribution noise</h2>
+  </div>
+
+  <figure class="panel"><img src="./media/partb/ood.png" alt="Denoiser outputs at sigma 0 through 1"><figcaption>$\sigma$ = 0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0</figcaption></figure>
+</section>
+
+<!-- ============ B1.2.3 ============ -->
+<section id="b123">
+  <div class="head">
+    <div class="ord">1.2.3</div>
+    <h2>Denoising pure noise</h2>
+  </div>
+
+  <h3>Training loss</h3>
+  <figure class="panel"><img src="./media/partb/pure_noise_loss.png" alt="Training loss for denoising pure noise"><figcaption>MSE per optimizer step</figcaption></figure>
+
+  <h3>Results</h3>
+  <div class="pair">
+    <figure><img src="./media/partb/pure_noise_1.png" alt="Noise and outputs after epoch 1" style="min-height:0"><figcaption>Epoch 1: noise, output</figcaption></figure>
+    <figure><img src="./media/partb/pure_noise_5.png" alt="Noise and outputs after epoch 5" style="min-height:0"><figcaption>Epoch 5: noise, output</figcaption></figure>
+  </div>
+  <div class="prose">
+    <p>The patterns I observed in the generated outputs are that the model cannot produce a specific number from pure noise, and more epochs do not change this. All the samples look the same, as an averaged blob of pixels across all the numbers that the image could be. There is no clear distinction to what the image is. These patterns may exist because pure noise gives the model no leads on what the number could be, so it has no information about which digit to produce. Since the model tries to minimize MSE, averaging the training data and using the mean is the best it can do (intercept model).</p>
+  </div>
+</section>
+
+<!-- =================================================================== -->
+<h2 class="part">Part B2: Flow matching</h2>
+
+<!-- ============ B2.2 ============ -->
+<section id="b22">
+  <div class="head">
+    <div class="ord">2.2</div>
+    <h2>Training with time</h2>
+  </div>
+
+  <h3>Training loss</h3>
+  <figure class="panel"><img src="./media/partb/time_conditioned_loss.png" alt="Training loss for the time-conditioned UNet"><figcaption>MSE per optimizer step</figcaption></figure>
+</section>
+
+<!-- ============ B2.3 ============ -->
+<section id="b23">
+  <div class="head">
+    <div class="ord">2.3</div>
+    <h2>Sampling with time</h2>
+  </div>
+
+  <figure class="panel"><img src="./media/partb/time_epoch1.png" alt="Time-conditioned samples after epoch 1"><figcaption>Epoch 1</figcaption></figure>
+  <figure class="panel"><img src="./media/partb/time_epoch5.png" alt="Time-conditioned samples after epoch 5"><figcaption>Epoch 5</figcaption></figure>
+  <figure class="panel"><img src="./media/partb/time_epoch10.png" alt="Time-conditioned samples after epoch 10"><figcaption>Epoch 10</figcaption></figure>
+</section>
+
+<!-- ============ B2.5 ============ -->
+<section id="b25">
+  <div class="head">
+    <div class="ord">2.5</div>
+    <h2>Training with class</h2>
+  </div>
+
+  <h3>Training loss, with exponential scheduler</h3>
+  <figure class="panel"><img src="./media/partb/class_conditioned_loss.png" alt="Training loss for the class-conditioned UNet with scheduler"><figcaption>Adam, lr 1e-2, ExponentialLR $\gamma = 0.1^{1/10}$, 10 epochs</figcaption></figure>
+
+  <h3>Training loss, no scheduler</h3>
+  <figure class="panel"><img src="./media/partb/class_no_scheduler_loss.png" alt="Training loss for the class-conditioned UNet without scheduler"><figcaption>Adam, constant lr 1e-3, 10 epochs</figcaption></figure>
+</section>
+
+<!-- ============ B2.6 ============ -->
+<section id="b26">
+  <div class="head">
+    <div class="ord">2.6</div>
+    <h2>Sampling with class</h2>
+  </div>
+
+  <h3>With exponential scheduler</h3>
+  <figure class="panel"><img src="./media/partb/class_epoch1.png" alt="Class-conditioned samples after epoch 1"><figcaption>Epoch 1</figcaption></figure>
+  <figure class="panel"><img src="./media/partb/class_epoch5.png" alt="Class-conditioned samples after epoch 5"><figcaption>Epoch 5</figcaption></figure>
+  <figure class="panel"><img src="./media/partb/class_epoch10.png" alt="Class-conditioned samples after epoch 10"><figcaption>Epoch 10</figcaption></figure>
+
+  <h3>Without the scheduler</h3>
+  <figure class="panel"><img src="./media/partb/no_scheduler_epoch1.png" alt="No-scheduler samples after epoch 1"><figcaption>Epoch 1</figcaption></figure>
+  <figure class="panel"><img src="./media/partb/no_scheduler_epoch5.png" alt="No-scheduler samples after epoch 5"><figcaption>Epoch 5</figcaption></figure>
+  <figure class="panel"><img src="./media/partb/no_scheduler_epoch10.png" alt="No-scheduler samples after epoch 10"><figcaption>Epoch 10</figcaption></figure>
+  <div class="prose">
+    <p>To compensate for removing the scheduler, I trained with a constant learning rate of 1e-3, which is lower than the other learning rate (1e-2) used with the scheduler. The only difference here is that the steps taken to update the weights are much smaller. Even so, the 1e-3 run formed clean digits faster, because 1e-2 made the updates overshoot early in training. Had we used the larger learning rate, the loss may have not converged due to oscillation. Thankfully, this worked well because the no scheduler optimization resulted in well-formed numbers. We can see that using 1e-2 was too high a learning rate, and the scheduler helped bring the learning rate down to converge to better images. Starting at a lower learning rate was low enough to keep a steady formation of the digits, so each update is better and closer to the minimal loss.</p>
+  </div>
+</section>
+
+<footer>
+  <a href="../../index.html">All projects</a>
+</footer>
+
+</div>
+</body>
+</html>
