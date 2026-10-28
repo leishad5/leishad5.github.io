@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project 4A · CS180</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Spectral:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<script>window.MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+<style>
+:root{--paper:#F7F6F3;--ink:#22221F;--dim:#7E7B74;--rule:#DFDCD5;--tint:#EDEBE6;--measure:62ch}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Instrument Sans",system-ui,sans-serif;
+  font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:960px;margin:0 auto;padding:0 32px 96px}
+
+/* ---------- header ---------- */
+header{padding-top:112px}
+.course{font-size:14px;color:var(--dim);margin:0 0 44px}
+h1{font-weight:500;font-size:clamp(32px,5.4vw,48px);letter-spacing:-.035em;line-height:1.05;margin:0}
+.byline{display:flex;gap:24px;font-size:14px;color:var(--dim);margin-top:20px}
+.toc{list-style:none;padding:0;margin:56px 0 0;max-width:560px}
+.toc li{border-top:1px solid var(--rule)}
+.toc li:last-child{border-bottom:1px solid var(--rule)}
+.toc a{display:flex;gap:24px;padding:10px 0;border:0;font-size:15px}
+.toc a span{width:40px;color:var(--dim);font-variant-numeric:tabular-nums}
+.toc a:hover{color:var(--dim)}
+
+/* ---------- sections ---------- */
+section{padding-top:96px}
+.head{display:grid;grid-template-columns:64px 1fr;gap:24px;margin-bottom:40px}
+.ord{font-family:"Spectral",Georgia,serif;font-style:italic;font-weight:300;font-size:32px;line-height:1;color:var(--dim)}
+.head h2{font-weight:500;font-size:26px;letter-spacing:-.025em;line-height:1.2;margin:0 0 10px}
+h3{
+  font-weight:500;font-size:15px;letter-spacing:-.005em;
+  margin:64px 0 20px;
+}
+.brief{font-size:15px;color:var(--dim);max-width:var(--measure);margin:0}
+p{max-width:var(--measure)}
+.prose{margin:40px 0 0;padding-left:88px}
+.prose p + p{margin-top:20px}
+
+/* ---------- math ---------- */
+.math{overflow-x:auto;margin:24px 0;padding-left:88px}
+.math.tight{margin:8px 0}
+
+/* full matrices: small type, one row per image set */
+h4{font-weight:500;font-size:14px;color:var(--dim);margin:28px 0 6px}
+.mats{font-size:10.5px;overflow-x:auto;overflow-y:hidden;padding:4px 0}
+.mats mjx-container{margin:0 !important}
+
+/* ---------- figures ---------- */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.pair + .pair{margin-top:40px}
+figure{margin:0}
+figure img{display:block;width:100%;height:auto;background:var(--tint)}
+figcaption{font-family:"Spectral",Georgia,serif;font-style:italic;font-weight:300;font-size:18px;margin-top:14px}
+.wide{margin-top:40px}
+figure + figure.wide{margin-top:40px}
+
+/* dense grids */
+.tight{gap:12px}
+.tight figcaption{font-size:15px;margin-top:8px}
+
+/* placeholder text: delete class="fill" once written */
+.fill{display:block;padding:14px 16px;background:var(--tint);color:#6F6C65;font-family:"Spectral",Georgia,serif;font-style:italic;font-size:16px;line-height:1.6}
+
+.zoom img{image-rendering:pixelated}
+.zoom + .zoom{margin-top:24px}
+
+/* results table */
+table{border-collapse:collapse;width:100%;max-width:560px;font-size:15px;margin:0}
+th,td{text-align:left;padding:9px 12px 9px 0;border-top:1px solid var(--rule)}
+tr:last-child td{border-bottom:1px solid var(--rule)}
+th{font-weight:400;color:var(--dim);font-size:14px}
+td:not(:first-child),th:not(:first-child){text-align:right;font-variant-numeric:tabular-nums}
+
+.prose ul.changes{max-width:var(--measure);padding-left:20px;margin:16px 0}
+.prose ul.changes li{margin-bottom:10px}
+.prose code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.88em;background:var(--tint);padding:1px 4px}
+
+/* code snippets */
+.code{margin:0 0 28px}
+.code .label{font-size:14px;color:var(--dim);margin:0 0 8px}
+pre{margin:0;padding:18px 20px;background:var(--tint);overflow-x:auto;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:13.5px;line-height:1.6;tab-size:4}
+details.code summary{cursor:pointer;font-size:14px;color:var(--dim);margin:0 0 8px}
+
+footer{margin-top:120px;padding-top:18px;border-top:1px solid var(--rule);font-size:14px;color:var(--dim)}
+a{color:inherit;text-decoration:none;border-bottom:1px solid var(--rule)}
+a:hover{border-bottom-color:var(--ink)}
+a:focus-visible{outline:1.5px solid var(--ink);outline-offset:3px}
+
+@media (max-width:760px){
+  .wrap{padding:0 22px 88px}
+  header{padding-top:64px}
+  section{padding-top:80px}
+  .head{grid-template-columns:1fr;gap:10px}
+  .ord{font-size:26px}
+  .prose,.math{padding-left:0}
+  .pair{grid-template-columns:1fr !important;gap:40px}
+  .pair.tight{grid-template-columns:1fr 1fr !important;gap:12px}
+}
+
+/* printing to PDF for Gradescope */
+@media print{
+  :root{--paper:#fff;--ink:#000;--dim:#555;--rule:#ccc;--tint:#f0f0f0}
+  body{font-size:11.5pt}
+  .wrap{max-width:none;padding:0}
+  section{padding-top:40px}
+  figure{page-break-inside:avoid}
+  header{padding-top:0}
+  .toc{display:none}
+  pre{white-space:pre-wrap}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="course"><a href="https://cal-cs180.github.io/fa26/hw/proj3/partA.html">CS180: Intro to Computer Vision and Computational Photography</a> · Project 4A</p>
+  <h1>Image Warping and Mosaicing</h1>
+  <div class="byline">
+    <span>Leisha Devisetti</span>
+    <span>Fall 2026</span>
+  </div>
+
+  <ul class="toc">
+    <li><a href="#a1"><span>A.1</span>Shooting the pictures</a></li>
+    <li><a href="#a2"><span>A.2</span>Recovering homographies</a></li>
+    <li><a href="#a3"><span>A.3</span>Warping and rectification</a></li>
+    <li><a href="#a4"><span>A.4</span>Blending into a mosaic</a></li>
+  </ul>
+</header>
+
+<!-- ============ A.1 ============ -->
+<section id="a1">
+  <div class="head">
+    <div class="ord">A.1</div>
+    <div>
+      <h2>Shooting the pictures</h2>
+      <p class="brief">Fixed center of projection, camera rotated between shots, so each pair is related by a projective transformation.</p>
+    </div>
+  </div>
+
+  <h3>Downtown Austin, Texas skyline</h3>
+  <div class="pair">
+    <figure><img src="./media/skyline_left.JPG" alt="Austin skyline, left"><figcaption>Left</figcaption></figure>
+    <figure><img src="./media/skyline_right.JPG" alt="Austin skyline, right"><figcaption>Right</figcaption></figure>
+  </div>
+
+  <h3>Lake Austin</h3>
+  <div class="pair">
+    <figure><img src="./media/lake_left.JPG" alt="Lake Austin, left"><figcaption>Left</figcaption></figure>
+    <figure><img src="./media/lake_right.JPG" alt="Lake Austin, right"><figcaption>Right</figcaption></figure>
+  </div>
+
+  <h3>Shakespeare's Globe, London</h3>
+  <div class="pair">
+    <figure><img src="./media/globe_left.JPG" alt="Shakespeare's Globe, left"><figcaption>Left</figcaption></figure>
+    <figure><img src="./media/globe_right.JPG" alt="Shakespeare's Globe, right"><figcaption>Right</figcaption></figure>
+  </div>
+  <div class="prose">
+    <p>I used images from past trips I have taken where I wanted to capture a panoramic view. When I take these images, I simply rotate the camera to get a wider view that my eyes see that the camera doesn't quite capture in a single frame.</p>
+  </div>
+</section>
+
+<!-- ============ A.2 ============ -->
+<section id="a2">
+  <div class="head">
+    <div class="ord">A.2</div>
+    <div>
+      <h2>Recovering homographies</h2>
+      <p class="brief">I used 8 correspondences per pair and mapped the right image into the left image's basis. I also used least squares to solve for the H matrix.</p>
+    </div>
+  </div>
+
+  <h3>Correspondences</h3>
+  <figure><img src="./media/skyline_features.jpg" alt="Skyline correspondences"><figcaption>Austin skyline, 8 pairs</figcaption></figure>
+  <figure class="wide"><img src="./media/lake_features.jpg" alt="Lake correspondences"><figcaption>Lake Austin, 8 pairs</figcaption></figure>
+  <figure class="wide"><img src="./media/globe_features.jpg" alt="Globe correspondences"><figcaption>Shakespeare's Globe, 8 pairs</figcaption></figure>
+
+  <h3>Systems of equations and recovered homographies (right image → left image)</h3>
+  <h4>Downtown Austin, Texas skyline</h4>
+  <div class="mats">
+  $$
+  \underbrace{\begin{bmatrix}
+103.4 & 1270.5 & 1 & 0 & 0 & 0 & -102428 & -1258357 \\
+0 & 0 & 0 & 103.4 & 1270.5 & 1 & -144906 & -1780205 \\
+647.1 & 1373.7 & 1 & 0 & 0 & 0 & -957062 & -2031789 \\
+0 & 0 & 0 & 647.1 & 1373.7 & 1 & -964576 & -2047741 \\
+1390.3 & 1291.1 & 1 & 0 & 0 & 0 & -3060945 & -2842579 \\
+0 & 0 & 0 & 1390.3 & 1291.1 & 1 & -1948111 & -1809134 \\
+688.4 & 2289.0 & 1 & 0 & 0 & 0 & -1056030 & -3511551 \\
+0 & 0 & 0 & 688.4 & 2289.0 & 1 & -1632476 & -5428373 \\
+1252.7 & 2598.6 & 1 & 0 & 0 & 0 & -2576893 & -5345751 \\
+0 & 0 & 0 & 1252.7 & 2598.6 & 1 & -3401763 & -7056942 \\
+2615.2 & 2220.1 & 1 & 0 & 0 & 0 & -9069364 & -7699213 \\
+0 & 0 & 0 & 2615.2 & 2220.1 & 1 & -6166164 & -5234613 \\
+3021.3 & 1649.0 & 1 & 0 & 0 & 0 & -11787264 & -6433320 \\
+0 & 0 & 0 & 3021.3 & 1649.0 & 1 & -5314614 & -2900640 \\
+2635.9 & 2701.9 & 1 & 0 & 0 & 0 & -9231656 & -9462732 \\
+0 & 0 & 0 & 2635.9 & 2701.9 & 1 & -7502741 & -7690541
+  \end{bmatrix}}_{A}
+  \mathbf{h} =
+  \underbrace{\begin{bmatrix} 990.5 \\ 1401.2 \\ 1479.1 \\ 1490.7 \\ 2201.7 \\ 1401.2 \\ 1534.1 \\ 2371.5 \\ 2057.1 \\ 2715.6 \\ 3467.9 \\ 2357.8 \\ 3901.4 \\ 1759.1 \\ 3502.3 \\ 2846.4 \end{bmatrix}}_{\mathbf{b}}
+  \qquad\qquad
+  H = \begin{bmatrix} 0.8554 & -0.0140 & 904.26 \\ -0.0573 & 0.9185 & 219.28 \\ -3.25 \times 10^{-5} & -8.19 \times 10^{-6} & 1.0000 \end{bmatrix}
+  $$
+  </div>
+
+  <h4>Lake Austin</h4>
+  <div class="mats">
+  $$
+  \underbrace{\begin{bmatrix}
+343.1 & 1918.3 & 1 & 0 & 0 & 0 & -357367 & -1998173 \\
+0 & 0 & 0 & 343.1 & 1918.3 & 1 & -713322 & -3988449 \\
+116.5 & 1100.7 & 1 & 0 & 0 & 0 & -80443 & -759866 \\
+0 & 0 & 0 & 116.5 & 1100.7 & 1 & -137450 & -1298354 \\
+530.2 & 1153.3 & 1 & 0 & 0 & 0 & -580166 & -1261880 \\
+0 & 0 & 0 & 530.2 & 1153.3 & 1 & -658503 & -1432265 \\
+369.3 & 1081.0 & 1 & 0 & 0 & 0 & -347134 & -1016021 \\
+0 & 0 & 0 & 369.3 & 1081.0 & 1 & -427168 & -1250272 \\
+300.4 & 1993.8 & 1 & 0 & 0 & 0 & -314879 & -2089927 \\
+0 & 0 & 0 & 300.4 & 1993.8 & 1 & -648247 & -4302575 \\
+100.1 & 421.1 & 1 & 0 & 0 & 0 & -70753 & -297596 \\
+0 & 0 & 0 & 100.1 & 421.1 & 1 & -53331 & -224317 \\
+628.7 & 1054.8 & 1 & 0 & 0 & 0 & -760195 & -1275314 \\
+0 & 0 & 0 & 628.7 & 1054.8 & 1 & -718902 & -1206040 \\
+264.3 & 1169.7 & 1 & 0 & 0 & 0 & -219751 & -972604 \\
+0 & 0 & 0 & 264.3 & 1169.7 & 1 & -329949 & -1460334
+  \end{bmatrix}}_{A}
+  \mathbf{h} =
+  \underbrace{\begin{bmatrix} 1041.6 \\ 2079.2 \\ 690.3 \\ 1179.5 \\ 1094.2 \\ 1241.9 \\ 939.9 \\ 1156.6 \\ 1048.2 \\ 2158.0 \\ 706.7 \\ 532.7 \\ 1209.1 \\ 1143.4 \\ 831.5 \\ 1248.5 \end{bmatrix}}_{\mathbf{b}}
+  \qquad\qquad
+  H = \begin{bmatrix} 0.5199 & 0.0234 & 560.59 \\ -0.2250 & 0.7457 & 224.99 \\ -2.34 \times 10^{-4} & -8.54 \times 10^{-5} & 1.0000 \end{bmatrix}
+  $$
+  </div>
+
+  <h4>Shakespeare's Globe, London</h4>
+  <div class="mats">
+  $$
+  \underbrace{\begin{bmatrix}
+86.7 & 1993.8 & 1 & 0 & 0 & 0 & -63549 & -1461478 \\
+0 & 0 & 0 & 86.7 & 1993.8 & 1 & -169722 & -3903247 \\
+155.6 & 1737.7 & 1 & 0 & 0 & 0 & -125844 & -1404979 \\
+0 & 0 & 0 & 155.6 & 1737.7 & 1 & -267400 & -2985381 \\
+178.6 & 450.6 & 1 & 0 & 0 & 0 & -157329 & -396898 \\
+0 & 0 & 0 & 178.6 & 450.6 & 1 & -86361 & -217865 \\
+21.0 & 1301.0 & 1 & 0 & 0 & 0 & -14516 & -898127 \\
+0 & 0 & 0 & 21.0 & 1301.0 & 1 & -27220 & -1684106 \\
+155.6 & 1606.4 & 1 & 0 & 0 & 0 & -125333 & -1293518 \\
+0 & 0 & 0 & 155.6 & 1606.4 & 1 & -247469 & -2554052 \\
+86.7 & 2187.5 & 1 & 0 & 0 & 0 & -63264 & -1596292 \\
+0 & 0 & 0 & 86.7 & 2187.5 & 1 & -186232 & -4699064 \\
+434.7 & 1672.0 & 1 & 0 & 0 & 0 & -474245 & -1824015 \\
+0 & 0 & 0 & 434.7 & 1672.0 & 1 & -741158 & -2850605 \\
+424.9 & 739.6 & 1 & 0 & 0 & 0 & -469079 & -816502 \\
+0 & 0 & 0 & 424.9 & 739.6 & 1 & -314227 & -546958
+  \end{bmatrix}}_{A\;(16\times 8)}
+  \mathbf{h} =
+  \underbrace{\begin{bmatrix} 733.0 \\ 1957.7 \\ 808.5 \\ 1718.0 \\ 880.8 \\ 483.5 \\ 690.3 \\ 1294.5 \\ 805.2 \\ 1590.0 \\ 729.7 \\ 2148.1 \\ 1090.9 \\ 1704.9 \\ 1104.0 \\ 739.6 \end{bmatrix}}_{\mathbf{b}}
+  \qquad\qquad
+  H = \begin{bmatrix} 0.6990 & -0.0454 & 726.00 \\ -0.2410 & 0.8930 & 101.87 \\ -2.29 \times 10^{-4} & -1.48 \times 10^{-5} & 1.0000 \end{bmatrix}
+  $$
+  </div>
+</section>
+
+<!-- ============ A.3 ============ -->
+<section id="a3">
+  <div class="head">
+    <div class="ord">A.3</div>
+    <div>
+      <h2>Warping and rectification</h2>
+    </div>
+  </div>
+
+  <h3>Rectification: painting</h3>
+  <div class="pair tight" style="grid-template-columns:repeat(3,1fr)">
+    <figure><img src="./media/rect1_original.jpg" alt="Painting, original"><figcaption>Original</figcaption></figure>
+    <figure><img src="./media/rect1_nn.jpg" alt="Painting, rectified with nearest neighbor"><figcaption>Nearest neighbor</figcaption></figure>
+    <figure><img src="./media/rect1_bilinear.jpg" alt="Painting, rectified with bilinear"><figcaption>Bilinear</figcaption></figure>
+  </div>
+
+  <h3>Rectification: bench</h3>
+  <div class="pair tight" style="grid-template-columns:repeat(3,1fr)">
+    <figure><img src="./media/rect2_original.jpg" alt="Bench, original"><figcaption>Original</figcaption></figure>
+    <figure><img src="./media/rect2_nn.jpg" alt="Bench, rectified with nearest neighbor"><figcaption>Nearest neighbor</figcaption></figure>
+    <figure><img src="./media/rect2_bilinear.jpg" alt="Bench, rectified with bilinear"><figcaption>Bilinear</figcaption></figure>
+  </div>
+
+  <h3>Nearest neighbor vs. bilinear: right image warped into the left frame</h3>
+  <div class="pair tight">
+    <figure><img src="./media/skyline_warped_nn.jpg" alt="Skyline warped, nearest neighbor"><figcaption>Skyline, nearest neighbor</figcaption></figure>
+    <figure><img src="./media/skyline_warped_bil.jpg" alt="Skyline warped, bilinear"><figcaption>Skyline, bilinear</figcaption></figure>
+  </div>
+  <div class="pair tight">
+    <figure><img src="./media/lake_warped_nn.jpg" alt="Lake warped, nearest neighbor"><figcaption>Lake, nearest neighbor</figcaption></figure>
+    <figure><img src="./media/lake_warped_bil.jpg" alt="Lake warped, bilinear"><figcaption>Lake, bilinear</figcaption></figure>
+  </div>
+  <div class="pair tight">
+    <figure><img src="./media/globe_warped_nn.jpg" alt="Globe warped, nearest neighbor"><figcaption>Globe, nearest neighbor</figcaption></figure>
+    <figure><img src="./media/globe_warped_bil.jpg" alt="Globe warped, bilinear"><figcaption>Globe, bilinear</figcaption></figure>
+  </div>
+  <h3>Close-ups</h3>
+  <p class="brief" style="margin-bottom:24px">Small crops of the warped right images, enlarged so individual pixels are visible.</p>
+  <div class="pair tight zoom">
+    <figure><img src="./media/skyline_nn_zoom.png" alt="Skyline crane, nearest neighbor close-up"><figcaption>Skyline crane, nearest neighbor</figcaption></figure>
+    <figure><img src="./media/skyline_bil_zoom.png" alt="Skyline crane, bilinear close-up"><figcaption>Skyline crane, bilinear</figcaption></figure>
+  </div>
+  <div class="pair tight zoom">
+    <figure><img src="./media/lake_nn_zoom.png" alt="Lake bridge pillars, nearest neighbor close-up"><figcaption>Lake bridge, nearest neighbor</figcaption></figure>
+    <figure><img src="./media/lake_bil_zoom.png" alt="Lake bridge pillars, bilinear close-up"><figcaption>Lake bridge, bilinear</figcaption></figure>
+  </div>
+  <div class="pair tight zoom">
+    <figure><img src="./media/globe_nn_zoom.png" alt="Globe audience, nearest neighbor close-up"><figcaption>Globe audience, nearest neighbor</figcaption></figure>
+    <figure><img src="./media/globe_bil_zoom.png" alt="Globe audience, bilinear close-up"><figcaption>Globe audience, bilinear</figcaption></figure>
+  </div>
+  <h3>Runtime</h3>
+  <table>
+    <tr><th>Set</th><th>Nearest neighbor (s)</th><th>Bilinear (s)</th><th>Bilinear / NN</th></tr>
+    <tr><td>Skyline</td><td>0.104</td><td>0.113</td><td>1.1×</td></tr>
+    <tr><td>Lake</td><td>0.011</td><td>0.029</td><td>2.6×</td></tr>
+    <tr><td>Globe</td><td>0.368</td><td>1.519</td><td>4.1×</td></tr>
+  </table>
+  <div class="prose">
+    <p>Regarding the quality differences between nearest neighbor interpolation and bilinear interpolation, bilinear interpolation yielded better quality overall. Without zooming in, both interpolation methods result in very similar warped images because neighboring pixels at a large scale are close enough in detail for us to not notice harsh interpolations, especially with large pixel resolutions. I had to zoom into thin edges to find the differences between the two interpolation methods, as shown above for my 3 main images.</p>
+    <p>Because nearest neighbor uses the closest source pixel to fill in any gaps in the projected image, diagonal edges look blocky and have harsh light/dark transitions. We see these blocky artifacts in the skyline's crane, the lake's dock arches, and the hand of the woman at the Globe. in the skyline and the bridge pillars over the lake. The edges in bilinear interpolation are more blended and smooth because of the weighted sourcing it uses for the imperfectly mapped output pixels.</p>
+    <p>However, bilinear interpolation was always slower than nearest neighbor interpolation. Nearest neighbor needs one lookup per output pixel, while bilinear needs four. </p>
+  </div>
+</section>
+
+<!-- ============ A.4 ============ -->
+<section id="a4">
+  <div class="head">
+    <div class="ord">A.4</div>
+    <div>
+      <h2>Blending into a mosaic</h2>
+    </div>
+  </div>
+
+  <div class="prose" style="margin-top:0">
+    <p>I kept the left image as the reference projection and warped the right image.</p>
+    <p>First, I computed the homography from the right image to the left image using the 8 correspondences and least squares. Then I multiplied each of the right image’s four corners by $H$ in homogeneous coordinates and divided by the third coordinate, which gave the warped corner positions. I used those to make a canvas large enough to hold both the left image and the warped right image. I inverse warped the right image onto that canvas with bilinear interpolation and kept a mask of where its pixels landed.</p>
+    <p>To blend, I reused my multiresolution blending code from Project 2 instead of plain weighted averaging.</p>
+    <p>The mask is 1 wherever the left image is more central than the warped right image, using distance transforms of each image's mask. This puts the seam down the middle of the overlap. Like in Project 2, I built Laplacian stacks of both images and a Gaussian stack of the mask, then summed the blended levels.</p>
+    <p>I changed my Project 2 code in three ways:</p>
+    <ul class="changes">
+      <li> I used <code>cv.filter2D</code> with reflected borders instead of <code>scipy.signal.convolve2d</code> with symmetric borders. The mosaic canvases are much larger, and <code>convolve2d</code> with a large kernel would take a while. <code>filter2D</code> gives the same result much faster.</li>
+      <li>I used a 61&nbsp;&times;&nbsp;61 kernel with &sigma;&nbsp;=&nbsp;10 instead of 19&nbsp;&times;&nbsp;19 with &sigma;&nbsp;=&nbsp;3. The blur has to be more dramatic for a softer blend at this pixel resolution.</li>
+      <li>Outside each image, the canvas is black, and blurring would pull that black into the overlap and leave dark halos. So before building the stacks, I filled each image's empty area with the other image, then multiplied the result by the combined mask so black stays only where neither image exists.</li>
+    </ul>
+    <p>Together, this approach worked surprisingly well and there is minimal ghosting, if at all.</p>
+  </div>
+
+  <h3>Downtown Austin, Texas skyline</h3>
+  <div class="pair tight">
+    <figure><img src="./media/skyline_left.JPG" alt="Skyline source, left"><figcaption>Source, left</figcaption></figure>
+    <figure><img src="./media/skyline_right.JPG" alt="Skyline source, right"><figcaption>Source, right</figcaption></figure>
+  </div>
+  <figure class="wide"><img src="./media/skyline_mosaic.jpg" alt="Skyline mosaic"><figcaption>Mosaic</figcaption></figure>
+
+  <h3>Lake Austin</h3>
+  <div class="pair tight">
+    <figure><img src="./media/lake_left.JPG" alt="Lake source, left"><figcaption>Source, left</figcaption></figure>
+    <figure><img src="./media/lake_right.JPG" alt="Lake source, right"><figcaption>Source, right</figcaption></figure>
+  </div>
+  <figure class="wide"><img src="./media/lake_mosaic.jpg" alt="Lake mosaic"><figcaption>Mosaic</figcaption></figure>
+
+  <h3>Shakespeare's Globe, London</h3>
+  <div class="pair tight">
+    <figure><img src="./media/globe_left.JPG" alt="Globe source, left"><figcaption>Source, left</figcaption></figure>
+    <figure><img src="./media/globe_right.JPG" alt="Globe source, right"><figcaption>Source, right</figcaption></figure>
+  </div>
+  <figure class="wide"><img src="./media/globe_mosaic.jpg" alt="Globe mosaic"><figcaption>Mosaic</figcaption></figure>
+</section>
+
+<footer>
+  <a href="../index.html">All projects</a>
+</footer>
+
+</div>
+</body>
+</html>
