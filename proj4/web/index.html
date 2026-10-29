@@ -330,7 +330,7 @@ a:focus-visible{outline:1.5px solid var(--ink);outline-offset:3px}
   </table>
   <div class="prose">
     <p>Regarding the quality differences between nearest neighbor interpolation and bilinear interpolation, bilinear interpolation yielded better quality overall. Without zooming in, both interpolation methods result in very similar warped images because neighboring pixels at a large scale are close enough in detail for us to not notice harsh interpolations, especially with large pixel resolutions. I had to zoom into thin edges to find the differences between the two interpolation methods, as shown above for my 3 main images.</p>
-    <p>Because nearest neighbor uses the closest source pixel to fill in any gaps in the projected image, diagonal edges look blocky and have harsh light/dark transitions. We see these blocky artifacts in the skyline's crane, the lake's dock arches, and the hand of the woman at the Globe. in the skyline and the bridge pillars over the lake. The edges in bilinear interpolation are more blended and smooth because of the weighted sourcing it uses for the imperfectly mapped output pixels.</p>
+    <p>Because nearest neighbor uses the closest source pixel to fill in any gaps in the projected image, diagonal edges look blocky and have harsh light/dark transitions. We see these blocky artifacts in the skyline's crane, the lake's dock arches, and the hand of the woman at the Globe. The edges in bilinear interpolation are more blended and smooth because of the weighted sourcing it uses for the imperfectly mapped output pixels.</p>
     <p>However, bilinear interpolation was always slower than nearest neighbor interpolation. Nearest neighbor needs one lookup per output pixel, while bilinear needs four. </p>
   </div>
 </section>
