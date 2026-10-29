@@ -346,15 +346,13 @@ a:focus-visible{outline:1.5px solid var(--ink);outline-offset:3px}
 
   <div class="prose" style="margin-top:0">
     <p>I kept the left image as the reference projection and warped the right image.</p>
-    <p>First, I computed the homography from the right image to the left image using the 8 correspondences and least squares. Then I multiplied each of the right image’s four corners by $H$ in homogeneous coordinates and divided by the third coordinate, which gave the warped corner positions. I used those to make a canvas large enough to hold both the left image and the warped right image. I inverse warped the right image onto that canvas with bilinear interpolation and kept a mask of where its pixels landed.</p>
-    <p>To blend, I reused my multiresolution blending code from Project 2 instead of plain weighted averaging.</p>
-    <p>The mask is 1 wherever the left image is more central than the warped right image, using distance transforms of each image's mask. This puts the seam down the middle of the overlap. Like in Project 2, I built Laplacian stacks of both images and a Gaussian stack of the mask, then summed the blended levels.</p>
-    <p>I changed my Project 2 code in three ways:</p>
+    <p>First, I computed the homography from the right image to the left image using the 8 correspondences and least squares. Then I multiplied each of the right image’s four corners by $H$ in homogeneous coordinates and divided by the third coordinate, which gave the warped corner positions. I inverse warped the right image onto a canvas (larger than both images) with bilinear interpolation and kept a mask of its output pixels.</p>
+    <p>To blend, I reused my blending code from Project 2 instead of weighted averaging.</p>
+    <p>The mask is 1 wherever the left image is closer to the middle than the warped right image by using distance transforms of each image's mask. Like in Project 2, I built Laplacian stacks of both images and a Gaussian stack of the mask, then summed the blended levels.</p>
+    <p>I changed my Project 2 code in two ways:</p>
     <ul class="changes">
-      <li> I used <code>cv.filter2D</code> with reflected borders instead of <code>scipy.signal.convolve2d</code> with symmetric borders. The mosaic canvases are much larger, and <code>convolve2d</code> with a large kernel would take a while. <code>filter2D</code> gives the same result much faster.</li>
-      <li>I used a 61&nbsp;&times;&nbsp;61 kernel with &sigma;&nbsp;=&nbsp;10 instead of 19&nbsp;&times;&nbsp;19 with &sigma;&nbsp;=&nbsp;3. The blur has to be more dramatic for a softer blend at this pixel resolution.</li>
-      <li>Outside each image, the canvas is black, and blurring would pull that black into the overlap and leave dark halos. So before building the stacks, I filled each image's empty area with the other image, then multiplied the result by the combined mask so black stays only where neither image exists.</li>
-    </ul>
+      <li> I used <code>cv.filter2D</code> with reflected borders instead of <code>scipy.signal.convolve2d</code> with symmetric borders. The mosaic images are much larger, and <code>convolve2d</code> with a large kernel would take a while. <code>filter2D</code> gives the same result much faster.</li>
+      <li>I used a 61&nbsp;&times;&nbsp;61 kernel with &sigma;&nbsp;=&nbsp;10 instead of 19&nbsp;&times;&nbsp;19 with &sigma;&nbsp;=&nbsp;3. The blur has to be more dramatic for a softer blend at this high of a pixel resolution.</li>    </ul>
     <p>Together, this approach worked surprisingly well and there is minimal ghosting, if at all.</p>
   </div>
 
